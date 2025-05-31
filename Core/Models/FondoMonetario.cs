@@ -30,7 +30,7 @@ namespace PruebaTecnica1.Core.Models
 
             return new FondoMonetario
             {
-                Id = Guid.NewGuid(),
+                // id asignado por guid secuencial en SQL Server
                 Nombre = nombre,
                 Tipo = tipo,
                 Saldo = saldoInicial ?? Money.FromDecimal(0m)

@@ -24,7 +24,7 @@ namespace PruebaTecnica1.Core.Models
 
             return new Usuario
             {
-                Id = Guid.NewGuid(),
+                // id asignado por guid secuencial en SQL Server
                 NombreUsuario = nombreUsuario,
                 PasswordHash = passwordHash,
                 EsAdmin = esAdmin

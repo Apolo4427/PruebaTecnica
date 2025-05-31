@@ -44,7 +44,7 @@ namespace PruebaTecnica1.Interface.Persistence.Repositories
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw new InvalidOperationException("Conflicto de concurrencia al intentar ajustar el saldo del fondo.");
+                throw new DBConcurrencyException("Conflicto de concurrencia al intentar ajustar el saldo del fondo.");
             }
         }
 

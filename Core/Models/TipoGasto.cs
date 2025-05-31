@@ -28,7 +28,7 @@ namespace PruebaTecnica1.Core.Models
 
             return new TipoGasto
             {
-                Id = Guid.NewGuid(),
+                // id asignado por guid secuencial en SQL Server
                 Codigo = codigo,
                 Nombre = nombre,
                 Descripcion = descripcion

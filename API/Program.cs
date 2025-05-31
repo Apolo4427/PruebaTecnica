@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PruebaTecnica1.Aplication.Handlers.TipoGastoHandler;
 using PruebaTecnica1.Core.Ports.Repositories;
 using PruebaTecnica1.Interface.Persistence.Data;
 using PruebaTecnica1.Interface.Persistence.Repositories;
@@ -14,6 +15,10 @@ builder.Services.AddSwaggerGen();
 // Automapper
 
 // MediatR
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<CreateTipoGastoCommandHandler>();
+});
 
 //Repositories
 builder.Services.AddScoped<ITipoGastoRepository, TipoGastoEfRepository>();

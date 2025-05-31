@@ -46,7 +46,7 @@ namespace PruebaTecnica1.Core.Models
 
             return new RegistroGasto
             {
-                Id = Guid.NewGuid(),
+                // id asignado por guid secuencial en SQL Server
                 UsuarioId = usuarioId,
                 FondoMonetarioId = fondoMonetarioId,
                 Fecha = fecha,
