@@ -1,9 +1,10 @@
 using MediatR;
-using PruebaTecnica1.Application.DTOs;
+using PruebaTecnica1.Aplication.DTOs;
+using PruebaTecnica1.Application.Queries.UsuarioQueries;
 using PruebaTecnica1.Application.Services;
 using PruebaTecnica1.Core.Ports.Repositories;
 
-namespace PruebaTecnica1.Application.Queries.Usuario
+namespace PruebaTecnica1.Application.Queries.UsuarioHandler
 {
     public class LoginUsuarioQueryHandler : IRequestHandler<LoginUsuarioQuery, LoginResultDto>
     {

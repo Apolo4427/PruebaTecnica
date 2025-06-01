@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PruebaTecnica1.Core.Models;
+using PruebaTecnica1.Core.Models.VOs;
 
 namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
 {
@@ -9,11 +10,6 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
         public void Configure(EntityTypeBuilder<Deposito> builder)
         {
             builder.ToTable("Depositos");
-
-            // Clave primaria (Guid generado en el dominio)
-            builder.HasKey(d => d.Id);
-            builder.Property(d => d.Id)
-                   .ValueGeneratedNever();
 
             // Propiedades primitivas
             builder.Property(d => d.UsuarioId)
@@ -30,16 +26,14 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
                    .IsRequired();
 
             // VO Monto (Money) → mapeado a columna "Monto"
-            builder.OwnsOne(
-                d => d.Monto,
-                mb =>
-                {
-                    mb.Property(m => m.Amount)
-                      .HasColumnName("Monto")
-                      .HasColumnType("decimal(18,2)")
-                      .IsRequired();
-                }
-            );
+            builder.Property(d => d.Monto)
+                   .HasColumnName("Monto")
+                   .HasColumnType("decimal(18,2)")
+                   .IsRequired()
+                   .HasConversion(
+                       vo => vo.Amount,               // De Money → decimal
+                       amt => Money.Create(amt)       // De decimal → Money
+                   );
 
             // Guid secuencial
             builder.Property(d => d.Id)

@@ -4,6 +4,8 @@ namespace PruebaTecnica1.Core.Models.VOs
     {
         public string Value { get; }
 
+        private PlainPassword() {}
+
         private PlainPassword(string value) => Value = value;
 
         public static PlainPassword Create(string password)

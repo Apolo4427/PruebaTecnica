@@ -4,10 +4,9 @@ using PruebaTecnica1.Core.Ports.Repositories;
 
 namespace PruebaTecnica1.Aplication.Queries.TipoGastoQueries
 {
-    public class GetTipoGastoByIdQuery : IRequest<TipoGastoDto>
-    {
-        public Guid Id { get; set; }
-    }
+    public record GetTipoGastoByIdQuery (
+        Guid Id
+    ) : IRequest<TipoGastoDto>;
 
     public class GetTipoGastoByIdQueryHandler : IRequestHandler<GetTipoGastoByIdQuery, TipoGastoDto>
     {

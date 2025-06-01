@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PruebaTecnica1.Core.Models;
+using PruebaTecnica1.Core.Models.VOs;
 
 namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
 {
@@ -10,34 +11,25 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
         {
             builder.ToTable("Usuarios");
 
-            // Clave primaria (Guid generado en el dominio)
-            builder.HasKey(u => u.Id);
-            builder.Property(u => u.Id)
-                   .ValueGeneratedNever();
-
             // VO Username → mapeado a columna "NombreUsuario"
-            builder.OwnsOne(
-                u => u.NombreUsuario,
-                ub =>
-                {
-                    ub.Property(n => n.Value)
-                      .HasColumnName("NombreUsuario")
-                      .HasMaxLength(20)
-                      .IsRequired();
-                }
-            );
+            builder.Property(u => u.NombreUsuario)
+                   .HasColumnName("NombreUsuario")
+                   .HasMaxLength(20)
+                   .IsRequired()
+                   .HasConversion(
+                       vo => vo.Value,                  // De UsernameVO → string
+                       str => Username.Create(str)      // De string → UsernameVO
+                   );
 
             // VO PlainPassword (el valor que se almacena es el hash) → mapeado a "PasswordHash"
-            builder.OwnsOne(
-                u => u.PasswordHash,
-                pb =>
-                {
-                    pb.Property(p => p.Value)
-                      .HasColumnName("PasswordHash")
-                      .HasMaxLength(200)
-                      .IsRequired();
-                }
-            );
+            builder.Property(u => u.PasswordHash)
+                   .HasColumnName("PasswordHash")
+                   .HasMaxLength(200)
+                   .IsRequired()
+                   .HasConversion(
+                       vo => vo.Value,                       // De PlainPasswordVO → string
+                       str => PlainPassword.Create(str)      // De string → PlainPasswordVO
+                   );
 
             builder.Property(u => u.EsAdmin)
                    .HasColumnName("EsAdmin")

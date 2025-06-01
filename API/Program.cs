@@ -23,6 +23,19 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<CreateTipoGastoCommandHandler>();
 });
 
+// Definir la política CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200") // Origen(es) permitidos
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
 //Repositories
 builder.Services.AddScoped<ITipoGastoRepository, TipoGastoEfRepository>();
 builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioEfRepository>();
@@ -37,7 +50,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioEfRepository>();
 // Context
 builder.Services.AddDbContext<AppDbContext>((options) =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaulConection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConection"));
 });
 
 // hasher para password
@@ -52,11 +65,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// invocas EnsureCreated() antes de usar el contexto
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    // Esto creará la base de datos si no existe. 
+    // Si existe, hará nada.
+    dbContext.Database.EnsureCreated();
+}
+
 // Registrar user admin:
 using (var scope = app.Services.CreateScope())
 {
     var seederRepo = scope.ServiceProvider.GetRequiredService<IUsuarioRepository>();
-    var hasher     = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+    var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
 
     try
     {
@@ -72,6 +94,9 @@ using (var scope = app.Services.CreateScope())
         await seederRepo.AddAsync(nuevoAdmin, CancellationToken.None);
     }
 }
+
+// Usar CORS *antes* de MapControllers
+app.UseCors("AllowAngularDev");
 
 app.UseHttpsRedirection();
 app.MapControllers();

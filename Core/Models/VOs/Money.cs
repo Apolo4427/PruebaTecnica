@@ -6,6 +6,16 @@ namespace PruebaTecnica1.Core.Models.VOs
 
         private Money(decimal amount) => Amount = amount;
 
+        private Money() { }
+
+        public static Money Create(decimal amount)
+        {
+            if (amount < 0)
+                throw new ArgumentException("El monto no puede ser negativo.", nameof(amount));
+
+            return new Money(amount);
+        }
+
         public static Money FromDecimal(decimal amount)
         {
             if (amount < 0)

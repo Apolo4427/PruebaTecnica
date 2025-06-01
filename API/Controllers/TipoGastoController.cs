@@ -57,7 +57,7 @@ namespace PruebaTecnica1.API.Controllers
         {
             try
             {
-                var dto = await _mediator.Send(new GetTipoGastoByIdQuery { Id = id });
+                var dto = await _mediator.Send(new GetTipoGastoByIdQuery(id));
                 return Ok(dto);
             }
             catch (KeyNotFoundException)

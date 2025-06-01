@@ -30,4 +30,6 @@ namespace PruebaTecnica1.Aplication.DTOs
         public decimal MontoEjecutado { get; init; }
     }
 
+    public record UserDto(string UserName);
+
 }

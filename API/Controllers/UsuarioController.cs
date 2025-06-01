@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-// (podríamos agregar Commands para registrar otros usuarios)
+using PruebaTecnica1.Aplication.DTOs;
+using PruebaTecnica1.Aplication.Queries.UsuarioQueries;
 
 namespace PruebaTecnica1.API.Controllers
 {
@@ -11,7 +12,19 @@ namespace PruebaTecnica1.API.Controllers
         private readonly IMediator _mediator;
         public UsuarioController(IMediator mediator) => _mediator = mediator;
 
-        // Por el momento solo login en AuthController, 
-        // pero aquí podríamos exponer GET de perfil, etc.
+        [HttpGet("{UserName}")]
+        public async Task<ActionResult<UserDto>> GetUsuarioByUserName(string UserName)
+        {
+            try
+            {
+                var query = new GetUsuarioByUsernameQuery(UserName);
+                var dto = await _mediator.Send(query);
+                return Ok(dto);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"El usuario con nombre {UserName} no ha sido encontrado");
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 using MediatR;
-using PruebaTecnica1.Application.DTOs;
+using PruebaTecnica1.Aplication.DTOs;
 
-namespace PruebaTecnica1.Application.Queries.Usuario
+namespace PruebaTecnica1.Application.Queries.UsuarioQueries
 {
     /// <summary>
     /// Query para autenticación: recibe username y contraseña en texto plano.

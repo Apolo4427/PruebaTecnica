@@ -1,4 +1,4 @@
-namespace PruebaTecnica1.Application.DTOs
+namespace PruebaTecnica1.Aplication.DTOs
 {
     public record LoginResultDto(Guid UsuarioId, bool EsAdmin);
 }

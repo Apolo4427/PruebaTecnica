@@ -7,6 +7,8 @@ namespace PruebaTecnica1.Core.Models.VOs
     {
         public Guid  TipoGastoId { get; }
         public Money Monto       { get; }
+        
+        private GastoDetalle() {}
 
         public GastoDetalle(Guid tipoGastoId, Money monto)
         {
@@ -16,7 +18,7 @@ namespace PruebaTecnica1.Core.Models.VOs
                 throw new ArgumentNullException(nameof(monto), "El monto es obligatorio.");
 
             TipoGastoId = tipoGastoId;
-            Monto       = monto;
+            Monto = monto;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

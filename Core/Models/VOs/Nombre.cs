@@ -6,6 +6,11 @@ namespace PruebaTecnica1.Core.Models.VOs
 
         private Nombre(string value) => Value = value;
 
+        private Nombre()
+        {
+            
+        }
+
         public static Nombre Create(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))

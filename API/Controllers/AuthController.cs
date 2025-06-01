@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using PruebaTecnica1.Application.Queries.Usuario;
+using PruebaTecnica1.Application.Queries.UsuarioQueries;
 
 namespace PruebaTecnica1.API.Controllers
 {

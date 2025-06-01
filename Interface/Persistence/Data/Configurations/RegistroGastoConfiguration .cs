@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PruebaTecnica1.Core.Models;
+using PruebaTecnica1.Core.Models.VOs;
 
 namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
 {
@@ -9,11 +10,6 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
         public void Configure(EntityTypeBuilder<RegistroGasto> builder)
         {
             builder.ToTable("RegistrosGasto");
-
-            // Clave primaria (Guid generado en el dominio)
-            builder.HasKey(r => r.Id);
-            builder.Property(r => r.Id)
-                   .ValueGeneratedNever();
 
             // Propiedades primitivas
             builder.Property(r => r.UsuarioId)
@@ -66,16 +62,14 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
                       .IsRequired();
 
                     // VO Monto dentro de GastoDetalle → mapeado a "Monto"
-                    db.OwnsOne(
-                        d => d.Monto,
-                        mb =>
-                        {
-                            mb.Property(m => m.Amount)
-                              .HasColumnName("Monto")
-                              .HasColumnType("decimal(18,2)")
-                              .IsRequired();
-                        }
-                    );
+                    db.Property(d => d.Monto)
+                      .HasColumnName("Monto")
+                      .HasColumnType("decimal(18,2)")
+                      .IsRequired()
+                      .HasConversion(
+                          vo => vo.Amount,             // De Money → decimal
+                          amt => Money.Create(amt)     // De decimal → Money
+                      );
                 }
             );
 

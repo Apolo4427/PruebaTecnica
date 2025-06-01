@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PruebaTecnica1.Core.Models;
+using PruebaTecnica1.Core.Models.VOs;
 
 namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
 {
@@ -10,22 +11,15 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
         {
             builder.ToTable("FondosMonetarios");
 
-            // Clave primaria (Guid generado en el dominio)
-            builder.HasKey(f => f.Id);
-            builder.Property(f => f.Id)
-                   .ValueGeneratedNever();
-
             // VO Nombre → mapeado a columna "Nombre"
-            builder.OwnsOne(
-                f => f.Nombre,
-                nb =>
-                {
-                    nb.Property(n => n.Value)
-                      .HasColumnName("Nombre")
-                      .IsRequired()
-                      .HasMaxLength(100);
-                }
-            );
+            builder.Property(f => f.Nombre)
+                   .HasColumnName("Nombre")
+                   .HasMaxLength(100)
+                   .IsRequired()
+                   .HasConversion(
+                       vo => vo.Value,               // De NombreVO → string
+                       str => Nombre.Create(str)     // De string → NombreVO
+                   );
 
             // Enum TipoFondo → guardado como texto (string)
             builder.Property(f => f.Tipo)
@@ -34,16 +28,14 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
                    .IsRequired();
 
             // VO Saldo (Money) → mapeado a columna "Saldo"
-            builder.OwnsOne(
-                f => f.Saldo,
-                sb =>
-                {
-                    sb.Property(m => m.Amount)
-                      .HasColumnName("Saldo")
-                      .HasColumnType("decimal(18,2)")
-                      .IsRequired();
-                }
-            );
+            builder.Property(f => f.Saldo)
+                   .HasColumnName("Saldo")
+                   .HasColumnType("decimal(18,2)")
+                   .IsRequired()
+                   .HasConversion(
+                       vo => vo.Amount,          // De Money → decimal
+                       amt => Money.Create(amt)  // De decimal → Money
+                   );
 
             // Guid secuencial
             builder.Property(d => d.Id)

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PruebaTecnica1.Core.Models;
+using PruebaTecnica1.Core.Models.VOs;
 
 namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
 {
@@ -11,34 +12,25 @@ namespace PruebaTecnica1.Interface.Persistence.Data.Configurations
             // Nombre de la tabla
             builder.ToTable("TipoGastos");
 
-            // Clave primaria (Guid generado en el dominio)
-            builder.HasKey(t => t.Id);
-            builder.Property(t => t.Id)
-                   .ValueGeneratedNever();
-
             // VO CodigoTipoGasto → mapeado a columna "Codigo"
-            builder.OwnsOne(
-                t => t.Codigo,
-                cb =>
-                {
-                    cb.Property(c => c.Value)
-                      .HasColumnName("Codigo")
-                      .IsRequired()
-                      .HasMaxLength(8); // Formato "TG-0001"
-                }
-            );
+            builder.Property(t => t.Codigo)
+                .HasColumnName("Codigo")
+                .HasMaxLength(8)
+                .IsRequired()
+                .HasConversion(
+                    vo => vo.Value,
+                    str => CodigoTipoGasto.Create(str)
+                );
 
             // VO Nombre → mapeado a columna "Nombre"
-            builder.OwnsOne(
-                t => t.Nombre,
-                nb =>
-                {
-                    nb.Property(n => n.Value)
-                      .HasColumnName("Nombre")
-                      .IsRequired()
-                      .HasMaxLength(100);
-                }
-            );
+            builder.Property(t => t.Nombre)
+                .HasColumnName("Nombre")
+                .HasMaxLength(100)
+                .IsRequired()
+                .HasConversion(
+                    vo => vo.Value,
+                    str => Nombre.Create(str)
+                );
 
             // Descripción (string simple, opcional)
             builder.Property(t => t.Descripcion)

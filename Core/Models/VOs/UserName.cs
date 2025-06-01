@@ -7,6 +7,7 @@ namespace PruebaTecnica1.Core.Models.VOs
         private static readonly Regex _allowed = new(@"^[a-zA-Z0-9_]{3,20}$", RegexOptions.Compiled);
         public string Value { get; }
 
+        private Username() {}
         private Username(string value)
         {
             Value = value;
