@@ -11,9 +11,12 @@ namespace PruebaTecnica1.Interface.Persistence.Repositories
         private readonly AppDbContext _db;
         public UsuarioEfRepository(AppDbContext db) => _db = db;
 
-        public async Task<Usuario> GetByUsernameAsync(string username)
+        public async Task<Usuario> GetByUsernameAsync(string username, CancellationToken cancellationToken)
         {
-            var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == Username.Create(username));
+            var usuario = await _db.Usuarios.FirstOrDefaultAsync(
+                u => u.NombreUsuario == Username.Create(username),
+                cancellationToken
+            );
 
             if (usuario is null)
                 throw new KeyNotFoundException(
@@ -23,10 +26,10 @@ namespace PruebaTecnica1.Interface.Persistence.Repositories
             return usuario;
         }
 
-        public async Task AddAsync(Usuario entity)
+        public async Task AddAsync(Usuario entity, CancellationToken cancellationToken = default)
         {
             _db.Usuarios.Add(entity);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(cancellationToken);
         }
     }
 }
