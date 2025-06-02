@@ -7,5 +7,5 @@ namespace PruebaTecnica1.Aplication.Commands.FondoMonetarioCommand
         string Nombre,
         TipoFondo Tipo,
         decimal SaldoInicial
-    ): IRequest<Guid>;
+    ) : IRequest<Guid>;
 }
